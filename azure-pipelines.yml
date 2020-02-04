@@ -10,7 +10,7 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  tag: 'registry.cloud.tenable.com/hello-world-python/hello-world-python:robertoperrotti'
 
 stages:
 - stage: Build
@@ -25,10 +25,6 @@ stages:
       inputs:
         targetType: 'inline'
         script: 'docker login tenableio-docker-consec-local.jfrog.io -u pubread -p BXaXRD9n3uEWKkGgt56eHVD5h && docker pull tenableio-docker-consec-local.jfrog.io/cs-scanner:latest'
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: 'docker save registry.cloud.tenable.com/hello-world-python/hello-world-python:robertoperrotti | docker run -e TENABLE_ACCESS_KEY=d5b15636ad8b532750ca1b0d3c6dcb9fde77aa1fe045b8c4643c8abeb26ed82a -e TENABLE_SECRET_KEY=4bece89f0c1d9a3232273b1d0b0598e0fc8f8133ff7ad52fed2c56956d40dbe7 -e IMPORT_REPO_NAME=hello-world-python-azure -i tenableio-docker-consec-local.jfrog.io/cs-scanner:latest inspect-image hello-world-python-robertoperrottiazure'
 
     - task: Docker@2
       displayName: Build an image
@@ -37,3 +33,8 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+
+              - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'docker save registry.cloud.tenable.com/hello-world-python/hello-world-python:robertoperrotti | docker run -e TENABLE_ACCESS_KEY=d5b15636ad8b532750ca1b0d3c6dcb9fde77aa1fe045b8c4643c8abeb26ed82a -e TENABLE_SECRET_KEY=4bece89f0c1d9a3232273b1d0b0598e0fc8f8133ff7ad52fed2c56956d40dbe7 -e IMPORT_REPO_NAME=hello-world-python-azure -i tenableio-docker-consec-local.jfrog.io/cs-scanner:latest inspect-image hello-world-python-robertoperrottiazure'
